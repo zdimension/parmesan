@@ -168,7 +168,7 @@
       <circ-port height="10" pin="810,1050" width="10" x="335" y="65"/>
       <circ-port height="8" pin="490,160" width="8" x="276" y="156"/>
       <circ-port height="8" pin="170,210" width="8" x="126" y="106"/>
-      <circ-port height="10" pin="750,140" width="10" x="195" y="75"/>
+      <circ-port height="10" pin="750,140" width="10" x="405" y="115"/>
       <circ-anchor facing="east" height="6" width="6" x="397" y="77"/>
     </appear>
     <wire from="(380,410)" to="(440,410)"/>
@@ -188,8 +188,8 @@
     <wire from="(310,470)" to="(410,470)"/>
     <wire from="(230,520)" to="(270,520)"/>
     <wire from="(530,180)" to="(530,650)"/>
-    <wire from="(320,350)" to="(320,450)"/>
     <wire from="(320,550)" to="(320,650)"/>
+    <wire from="(320,350)" to="(320,450)"/>
     <wire from="(380,410)" to="(380,510)"/>
     <wire from="(320,750)" to="(320,850)"/>
     <wire from="(320,950)" to="(320,1050)"/>
