@@ -2,14 +2,13 @@
 
 import re, sys, os
 
-regexes = { re.compile(k): v for k, v in 
-	[
-		(r"(?:\{(R\w+)\})", r"(?P<F\1>r(?P<\1>\\d))"),
-		(r"(?:\{(imm\d)\})", r"(?P<F\1>#(?P<\1>\\d+))"),
-		(r"\{cond\}", r"(?P<cond>(?:[a-z]{2})?)"),
-		(r"\{label\}", r"(?P<label>[\.\\w]+)")
-	]
-}
+regexes = [
+	(r"(?:\{(R\w+)\})", r"(?P<F\1>r(?P<\1>\\d))"),
+	(r"(?:\{(imm\d)\})", r"(?P<F\1>#(?P<\1>\\d+))"),
+	(r"\{cond\}", r"(?P<cond>(?:[a-z]{2})?)"),
+	(r"\{label\}", r"(?P<label>[\.\\w]+)")
+]
+regexes = { re.compile(k): v for k, v in regexes }
 
 conds = ["eq", "ne", "cs", "cc", "mi", "pl", "vs", "vc", "hi", "ls", "ge", "lt", "gt", "le", "al", "nv"]
 conds_alias = {"hs": "cs", "lo": "cc"}
@@ -65,7 +64,10 @@ log = []
 jumps = []
 
 def assemble(line, labels, pc):
-	instr, args = line.split(None, 1)
+	try:
+		instr, args = line.split(None, 1)
+	except:
+		raise Exception(f"Invalid line: {line}")
 	oline = line = instr + " " + ", ".join(map(str.strip, filter(len, args.split(","))))
 	found = False
 	while not found:
@@ -103,7 +105,7 @@ def assemble(line, labels, pc):
 				dic[k] = (labels[v] - pc - 3, 8)
 				jumps.append((pc, labels[v]))
 			except KeyError:
-				raise Exception(f"Invalid label: {v} (available:{', '.join(labels.keys())}")
+				raise Exception(f"Invalid label: {v} (available: {', '.join(labels.keys())})")
 		elif k.startswith("imm"):
 			width = int(k[3:])
 			dic[k] = (int(v), width)
@@ -115,10 +117,13 @@ def assemble(line, labels, pc):
 			if v != other:
 				raise Exception(f"{k[:-1]} must have the same value for both parameters (has {other[0]}, {v[0]})")
 	res = 0
-	for val in output:
+	for nval in output:
 		width = 0
+		val = nval
 		if type(val) == str:
 			val, width = dic[val]
+			if nval.startswith("imm") and "sp" in line:
+				val >>= 2
 		res <<= width
 		if width != 0:
 			val &= 2 ** width - 1
@@ -140,23 +145,24 @@ labels = {}
 lines = map(str.lower, fp.readlines())
 instrs = []
 for i, line in enumerate(lines, 1):
-	try:
+	if "@" in line:
 		line = line[:line.index("@")]
-	except:
-		pass
-	line = line.strip().lower()
-	if not line:
-		continue
-	m = rlbl.match(line)
-	if m:
-		labels[m.group(1)] = pc
-		continue
-	else:
-		if line[0] == ".":
+	while True:
+		line = line.strip().lower()
+		if not line:
+			break
+		m = rlbl.match(line)
+		if m:
+			labels[m.group(1)] = pc
+			line = line[line.index(":")+1:]
 			continue
 		else:
-			instrs.append((i, line))
-			pc += 1
+			if line[0] == ".":
+				break
+			else:
+				instrs.append((i, line))
+				pc += 1
+				break
 pc = 0
 columns = f"║ PC │  OP  │ {'Instruction':^20} │ {'Arguments':^20} ║"
 sep = "╠" + "".join("═╪"[c == "│"] for c in columns[1:-1]) + "╣"
