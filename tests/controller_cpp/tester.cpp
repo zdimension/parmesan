@@ -27,11 +27,23 @@ void Tester::generateTest(long codeOp)
     case LSR:
         generateLsr();
         break;
+    case ASR:
+        generateAsr();
+        break;
     case ADD:
         generateAdd();
         break;
     case SUB:
         generateSub();
+        break;
+    case ADDIMM:
+        generateAddImm();
+        break;
+    case SUBIMM:
+        generateSubImm();
+        break;
+    case MOVIMM:
+        generateMovImm();
         break;
     }
 }
