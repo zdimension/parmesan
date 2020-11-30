@@ -20,15 +20,23 @@ public:
     {
         LSL,
         LSR,
+        ASR,
         ADD,
-        SUB
+        SUB,
+        ADDIMM,
+        SUBIMM,
+        MOVIMM
     };
 
 private:
     void generateLsl();
     void generateLsr();
+    void generateAsr();
     void generateAdd();
     void generateSub();
+    void generateAddImm();
+    void generateSubImm();
+    void generateMovImm();
 
     std::ofstream m_outFile;
     unsigned long m_nbTests;
