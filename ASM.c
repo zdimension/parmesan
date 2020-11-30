@@ -5,11 +5,23 @@
 
 #include "asm.h"
 
-int main(void){
-  //FILE *in,*out;
-  //fscanf(in, );
-  FILE *in,*out;
+int main(int argc, char *argv[]){  
+  char *FILE_IN = argv[1];
+  char *FILE_OUT = argv[2];
+  
+  if(argc < 2){
+    printf("./ASM in.s out.txt\n");
+    exit(EXIT_FAILURE);
+  }
 
+  assembler(FILE_IN, FILE_OUT);
+
+  return EXIT_SUCCESS;
+}
+
+void assembler(char *FILE_IN, char *FILE_OUT){
+  FILE *in,*out;
+  
   if( (in=fopen(FILE_IN,"r")) == NULL ) {
     perror(FILE_IN);
     exit(EXIT_FAILURE);
@@ -21,50 +33,42 @@ int main(void){
   }
   
   char debut[MAX_LINE_SIZE] = {};
-
-  while(strcmp(debut,".Lfunc_end0:")) {
-    fscanf(in,"%s",debut);
-    if(!strcmp(debut,".pad")) {
-      fseek(in,4*sizeof(char),1);
-      break;
-    }
-  }
-
-  int label[50];
+  char CmdLine[BUFSIZ];
+  Label label[30];
+  int numLabel = 0;
   int pc = 0;
-  enum instruction i;
-  while(strcmp(debut,".Lfunc_end0:")){    
-    fscanf(in,"%s",debut);
-    i = s2e(debut);
+  
+  enum instruction inst1;
+  
+  while(fscanf(in,"%[^\n]",CmdLine)!=EOF){
+    fgetc(in);
+    sscanf(CmdLine,"%s",debut);
     
-    if(i != -1) {
+    inst1 = s2e(debut);
+    
+    if(inst1 != -1) {
       pc++;
-      while(fgetc(in) != '\n'){}// next ligne
       continue;
     }
-    
-    if(strstr(debut,".LBB0_")){
-      label[*(debut+6)-'0'] = pc;
+    else if(strchr(debut,':')){//label et instructions doit dans different ligne      
+      debut[strlen(debut) - 1] = '\0';  // replace ':'
+      strcpy(label[numLabel].l, debut);
+      
+      label[numLabel].pc = pc;
+      numLabel++;
+      continue;
     }
   }
 
   rewind(in);
   debut[0] = '\0';  // init
-  
-  while(strcmp(debut,".Lfunc_end0:")) {
-    
-    fscanf(in,"%s",debut);
-    if(!strcmp(debut,".pad")) {
-      fseek(in,4*sizeof(char),1);
-      break;
-    }
-  }
-    
+
   int addr = 0;
   int num  = 0;
 
   int r[7] = {0};
-  int rn, rd, rdn, rm, rt, imm3, imm5, imm7, imm8, label1;
+  int rn, rd, rdn, rm, rt, imm3, imm5, imm7, imm8;
+  char labelRead[10];
   
   Inst_shift order_lla;
   Inst_ASA order_asa;
@@ -81,7 +85,7 @@ int main(void){
   while(strcmp(debut,".Lfunc_end0:")){
     fscanf(in,"%s",debut);
     inst = s2e(debut);
-    
+   
     switch(inst){
     case lsls :
     case lsrs :
@@ -233,19 +237,20 @@ int main(void){
     case b :
       //case bal : bal == b
       //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\t.LBB0_%d\n",&label1) ) > 0){
-	
-	order_b.idcode = 13;
-	order_b.cond = inst - beq;
-	imm8 =   -((addr - label[label1]) + 3);
-	order_b.imm8  = imm8;
-	addr++;
-	
-	//!!!!!!!!!! label - addr???  b .lbb0_1 imm8 == -2
-	//fprintf(out,"\n %s\t.LBB0_%d\n",debut, label1);
-	//fprintf(out,"imm8 == addr:%d - label:%d\n imm8=%d",addr,label[label1],order_b.imm8);
-	
-	fprintf(out,"%04hx ",order_b);
+      if ((num = fscanf(in,"\t%s\n",labelRead) ) > 0){
+	for(int i = 0; i < numLabel; i++){
+	  //fprintf(out,"%s : %s\n",label[i].l, labelRead);
+	  if(strcmp(label[i].l, labelRead) == 0) {
+	    order_b.idcode = 13;
+	    order_b.cond = inst - beq;
+	    imm8 =   -((addr - label[i].pc) + 3 );
+	    order_b.imm8  = imm8;
+
+	    fprintf(out,"%04hx ",order_b);
+	    addr++;
+	    break;
+	  }
+	}
       }
       break;
     default : break;
@@ -259,11 +264,7 @@ int main(void){
   }
   
   fclose(in);  fclose(out);
-  
-  return EXIT_SUCCESS;
 }
-
-
 
 enum instruction s2e(char* inst)
 {
@@ -310,3 +311,9 @@ enum instruction s2e(char* inst)
     
     return -1;
 } 
+
+
+//fprintf(out,"LABEL : %s NOT FOUND!\n", labelRead);
+//!!!!!!!!!! label - addr???  b .lbb0_1 imm8 == -2
+//fprintf(out,"\n %s\t.LBB0_%d\n",debut, label1);
+//fprintf(out,"imm8 == addr:%d - label:%d\n imm8=%d",addr,label[label1],order_b.imm8);

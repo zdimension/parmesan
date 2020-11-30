@@ -1,6 +1,11 @@
 #define MAX_LINE_SIZE 20
-#define FILE_IN "calculator.s"
-#define FILE_OUT "out.txt"
+
+#define LABEL_SIZE 10
+
+typedef struct {
+    int pc;
+    char l[LABEL_SIZE];
+} Label;
 
 enum instruction {
   lsls, lsrs, asrs,
@@ -12,6 +17,7 @@ enum instruction {
 };
 
 enum instruction s2e(char *);
+void assembler(char *, char *);
 
 typedef struct instruction_LLA
 {
