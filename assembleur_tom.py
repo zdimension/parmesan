@@ -185,14 +185,13 @@ def set(s, i, c):
 	return s[:i] + c + s[i+len(c):]
 root = len(columns) + 1
 for depth, (src, dst) in enumerate(jumps):
-	conflict = sum(1 for s, d in jumps[:depth] if s <= src <= d)
 	dsh = "─" * 3
-	pos = conflict * (len(dsh) + 3)
 	start, end = "╮", "╯"
 	step = 1
 	if dst < src:
 		start, end = end, start
 		step = -1
+	pos = ((max(len(l) for l in log[min(src,dst):max(src,dst)]) - root + 1) // 6) * (len(dsh) + 3)
 	log[src] = set(log[src], root + pos, ">" + dsh + start)
 	for i in range(src + step, dst, step):
 		log[i] = set(log[i], root + pos + len(dsh) + 1, "│")
