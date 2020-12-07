@@ -5,15 +5,23 @@
 
 #include "asm.h"
 
+int show_inst = 0;
+
 int main(int argc, char *argv[]){  
-  char *FILE_IN = argv[1];
-  char *FILE_OUT = argv[2];
-  
+
   if(argc < 2){
-    printf("./ASM in.s out.txt\n");
+    printf("./ASM [-i display inst] [in.s] [out.txt]\n");
     exit(EXIT_FAILURE);
   }
 
+  if(!strcmp(argv[1],"-i")){
+    show_inst = 1;
+    argv++;
+  }
+
+  char *FILE_IN = argv[1];
+  char *FILE_OUT = argv[2];
+  
   assembler(FILE_IN, FILE_OUT);
 
   return EXIT_SUCCESS;
@@ -38,15 +46,15 @@ void assembler(char *FILE_IN, char *FILE_OUT){
   int numLabel = 0;
   int pc = 0;
   
-  enum instruction inst1;
+  enum instruction inst;
   
   while(fscanf(in,"%[^\n]",CmdLine)!=EOF){
     fgetc(in);
     sscanf(CmdLine,"%s",debut);
     
-    inst1 = s2e(debut);
+    inst = s2e(debut);
     
-    if(inst1 != -1) {
+    if(inst != -1) {
       pc++;
       continue;
     }
@@ -78,20 +86,20 @@ void assembler(char *FILE_IN, char *FILE_OUT){
   Inst_stack order_stack;
   Inst_branch order_b;
 
-  enum instruction inst;
-
   fprintf(out,"v2.0 raw\n");
-  
-  while(strcmp(debut,".Lfunc_end0:")){
-    fscanf(in,"%s",debut);
+
+  while(fscanf(in,"%[^\n]",CmdLine)!=EOF){
+    fgetc(in);
+    sscanf(CmdLine,"%s",debut);
+    
     inst = s2e(debut);
    
     switch(inst){
     case lsls :
     case lsrs :
     case asrs :
-      //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\tr%d, r%d, #%d\n",&rd,&rm,&imm5)) == 3){ // !!\n
+      if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
+      if ((num = sscanf(CmdLine,"%*s\tr%d, r%d, #%d",&rd,&rm,&imm5)) == 3){ // !!\n
        
 	order_lla.idcode = 0;
 	order_lla.opcode = inst;
@@ -115,10 +123,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
       
     case adds :
     case subs :
-      //fprintf(out,"%s",debut);
-      
-      fscanf(in,"\tr%d, r%d, ",&rd,&rn);
-      if(fscanf(in,"#%d\n",&imm3) > 0){
+      if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
+      if(sscanf(CmdLine,"%*s\tr%d, r%d, #%d",&rd,&rn,&imm3) == 3){
 	r[rd] = r[rn] + ( inst == adds ? imm3 : -imm3 ); // adds et subs
 
 	order_asa.idcode = 0;
@@ -131,7 +137,7 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_asa);
 	
       }
-      else if( fscanf(in,"r%d\n",&rm) > 0){
+      else if( sscanf(CmdLine,"%*s\tr%d, r%d, r%d",&rd,&rn,&rm) == 3){
 	r[rd] = r[rn] + ( inst == adds ? r[rm] : -r[rm] ); // adds et subs
 	
 	order_asa.idcode = 0;
@@ -144,9 +150,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
       }
       break;
     case movs :
-      //fprintf(out,"%s",debut);
-      
-      if ( fscanf(in,"\tr%d, #%d\n",&rd, &imm8) > 0){
+      if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
+      if ( sscanf(CmdLine,"%*s\tr%d, #%d",&rd, &imm8) > 0){
 	r[rd] = imm8;
 	
 	order_movs.idcode = 0;
@@ -174,8 +179,11 @@ void assembler(char *FILE_IN, char *FILE_OUT){
     case muls : // problem
     case bics :
     case mvns :
-      //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\tr%d, r%d\n",&rdn,&rm) ) == 2){
+      if(show_inst == 1){
+	if(inst == muls) fprintf(out,"\n%-20s :",CmdLine);
+	else fprintf(out,"\n%-19s :",CmdLine);
+      }
+      if ((num = sscanf(CmdLine,"%*s\tr%d, r%d",&rdn,&rm) ) == 2){
 	order_data.idcode = 16;
 	order_data.opcode = inst - ands;  // !!!!!!!!!!!!and == 6
 	order_data.rdn = rdn;
@@ -187,8 +195,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
      
     case str :
     case ldr :
-      //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\tr%d, [sp, #%d]\n",&rt, &imm8) ) == 2){
+      if(show_inst == 1) fprintf(out,"\n%-19s :",CmdLine);
+      if ((num = sscanf(CmdLine,"%*s\tr%d, [sp, #%d]",&rt, &imm8) ) == 2){
 	
 	order_load.idcode = 9;
 	order_load.opcode = (inst == str ? 0 : 1);
@@ -210,8 +218,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
       
     case add :
     case sub :
-      //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\tsp, #%d\n",&imm7) ) > 0){
+      if(show_inst == 1) fprintf(out,"\n%-19s :",CmdLine);
+      if ((num = sscanf(CmdLine,"%*s\tsp, #%d",&imm7) ) > 0){
 	
 	order_stack.idcode = 11;
 	order_stack.opcode = (inst == add ? 0 : 1);
@@ -236,10 +244,12 @@ void assembler(char *FILE_IN, char *FILE_OUT){
     case ble :
     case b :
       //case bal : bal == b
-      //fprintf(out,"%s",debut);
-      if ((num = fscanf(in,"\t%s\n",labelRead) ) > 0){
+      if(show_inst == 1) {
+	if(inst == b) fprintf(out,"\n%-17s :",CmdLine);
+	else fprintf(out,"\n%-19s :",CmdLine);
+      }
+      if ((num = sscanf(CmdLine,"%*s\t%s",labelRead) ) > 0){
 	for(int i = 0; i < numLabel; i++){
-	  //fprintf(out,"%s : %s\n",label[i].l, labelRead);
 	  if(strcmp(label[i].l, labelRead) == 0) {
 	    order_b.idcode = 13;
 	    order_b.cond = inst - beq;
@@ -256,13 +266,7 @@ void assembler(char *FILE_IN, char *FILE_OUT){
     default : break;
     }
   }
-
-  if(strcmp(debut,".Lfunc_end0:")){
-    printf("2");
-    perror("NOT A .s FILE");
-    exit(EXIT_FAILURE);
-  }
-  
+ 
   fclose(in);  fclose(out);
 }
 
