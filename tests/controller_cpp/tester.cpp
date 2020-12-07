@@ -57,5 +57,11 @@ void Tester::generateTest(long codeOp)
         case LSL_REGISTER:
             generateLslRegister();
             break;
+    case STR:
+        generateStr();
+        break;
+    case LDR:
+        generateLdr();
+        break;
     }
 }
