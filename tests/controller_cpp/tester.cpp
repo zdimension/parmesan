@@ -45,5 +45,13 @@ void Tester::generateTest(long codeOp)
     case MOVIMM:
         generateMovImm();
         break;
+
+
+    case STR:
+        generateStr();
+        break;
+    case LDR:
+        generateLdr();
+        break;
     }
 }
