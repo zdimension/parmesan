@@ -25,10 +25,16 @@ public:
         SUB,
         ADDIMM,
         SUBIMM,
-        MOVIMM
+        MOVIMM,
+        AND_REGISTER,
+        EOR_REGISTER,
+        LSL_REGISTER,
+        STR,
+        LDR
     };
 
 private:
+    /// Shift_Add_Sub_Mov
     void generateLsl();
     void generateLsr();
     void generateAsr();
@@ -37,6 +43,13 @@ private:
     void generateAddImm();
     void generateSubImm();
     void generateMovImm();
+    void generateAndRegister();
+    void generateEorRegister();
+    void generateLslRegister();
+
+    /// Load_Store
+    void generateStr();
+    void generateLdr();
 
     std::ofstream m_outFile;
     unsigned long m_nbTests;
