@@ -12,7 +12,6 @@ int main()
 		
 loopStart:
 	PIXSET(tx, ty);
-
 	PIXSET(x, y);
 	
 	SCRUPD();
