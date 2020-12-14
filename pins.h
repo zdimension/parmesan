@@ -10,6 +10,7 @@
 #define SCRbuf		PIN(2)
 #define SCRupd		OUT(3)
 #define RESETpin	OUT(4)
+#define BREAKpin	OUT(5)
 
 #define DIP1 		INP(3)
 #define DIP2 		INP(4)
@@ -34,6 +35,8 @@
 #define READKEY(x) do{WAITKEY(); *x=KEYBchr;}while(0)
 
 #define PUTCHAR(x) do{TTYchr=x;}while(0)
+
+#define BREAK() do{BREAKpin=1;}while(0)
 
 #define INIT() \
 __asm__("sub sp, #120");\
