@@ -49,3 +49,5 @@ __asm__("sub sp, #120");\
 __asm__("sub sp, #120");\
 __asm__("sub sp, #56");\
 volatile int placeholder;
+
+#include "utils.h"
