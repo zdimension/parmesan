@@ -27,9 +27,10 @@ int main()
             }
         }
         RES = n;
-        continue;
-        notprime:
-            continue;
+        PRINTRES_FIX(3);
+        PUTCHAR('\n');
+	notprime:
+		continue;
     }
     while (1);
 }

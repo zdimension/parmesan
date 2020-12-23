@@ -58,7 +58,10 @@ read:
 	else
 		goto read;
 		
+	PUTCHAR('\n');
+	PRINTRES();
+		
 	while (!KEYBeof);
-	
+
 	RESET();
 }

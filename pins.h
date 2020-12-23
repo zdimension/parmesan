@@ -20,23 +20,7 @@
 #define JOYx		INP(8)
 #define JOYy		INP(9)
 #define RNG32		INP(10)
-
-#define BITVAL(x,y) (1 << ((7-x) | ((y & 3) << 3)))
-#define PIXSET(x,y)	do{SCRbuf |= BITVAL(x, y);}while(0)
-#define PIXCLR(x,y)	do{SCRbuf &= ~BITVAL(x, y);}while(0)
-#define SCRUPD() do{SCRupd = 1;}while(0)
-
-#define CLEAR() do{PUTCHAR('\f');}while(0)
-
-#define RESET() do{RESETpin = 1; while(1);}while(0)
-
-#define WAITKEY() do{while(!KEYBeof);}while(0)
-
-#define READKEY(x) do{WAITKEY(); *x=KEYBchr;}while(0)
-
-#define PUTCHAR(x) do{TTYchr=x;}while(0)
-
-#define BREAK() do{BREAKpin=1;}while(0)
+#define RESbcd		INP(11)
 
 #define INIT() \
 __asm__("sub sp, #120");\
