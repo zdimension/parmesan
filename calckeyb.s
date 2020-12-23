@@ -345,31 +345,61 @@ main:
 .LBB0_80:
 	b	.LBB0_81
 .LBB0_81:
-	ldr	r0, [sp, #80]
-	str	r0, [sp, #12]
-	ldr	r0, [sp, #12]
-	cmp	r0, #0
-	bne	.LBB0_85
+	movs	r0, #82
+	str	r0, [sp, #36]
 	b	.LBB0_82
 .LBB0_82:
 	b	.LBB0_83
 .LBB0_83:
-	movs	r0, #48
+	movs	r0, #61
 	str	r0, [sp, #36]
 	b	.LBB0_84
 .LBB0_84:
-	b	.LBB0_97
+	b	.LBB0_85
 .LBB0_85:
+	ldr	r0, [sp, #80]
+	str	r0, [sp, #12]
+	ldr	r0, [sp, #12]
+	cmp	r0, #0
+	bne	.LBB0_89
+	b	.LBB0_86
+.LBB0_86:
+	b	.LBB0_87
+.LBB0_87:
+	movs	r0, #48
+	str	r0, [sp, #36]
+	b	.LBB0_88
+.LBB0_88:
+	b	.LBB0_105
+.LBB0_89:
+	ldr	r0, [sp, #40]
+	cmp	r0, #0
+	bge	.LBB0_93
+	b	.LBB0_90
+.LBB0_90:
+	b	.LBB0_91
+.LBB0_91:
+	movs	r0, #45
+	str	r0, [sp, #36]
+	b	.LBB0_92
+.LBB0_92:
+	ldr	r0, [sp, #40]
+	rsbs	r0, r0, #0
+	str	r0, [sp, #40]
+	ldr	r0, [sp, #80]
+	str	r0, [sp, #12]
+	b	.LBB0_93
+.LBB0_93:
 	movs	r0, #0
 	str	r0, [sp, #8]
 	str	r0, [sp, #4]
-	b	.LBB0_86
-.LBB0_86:
+	b	.LBB0_94
+.LBB0_94:
 	ldr	r0, [sp, #4]
 	cmp	r0, #7
-	bgt	.LBB0_96
-	b	.LBB0_87
-.LBB0_87:
+	bgt	.LBB0_104
+	b	.LBB0_95
+.LBB0_95:
 	ldr	r0, [sp, #12]
 	movs	r1, #15
 	ands	r0, r1
@@ -379,54 +409,54 @@ main:
 	str	r0, [sp, #12]
 	ldr	r0, [sp, #8]
 	cmp	r0, #0
-	bne	.LBB0_92
-	b	.LBB0_88
-.LBB0_88:
+	bne	.LBB0_100
+	b	.LBB0_96
+.LBB0_96:
 	ldr	r0, [sp]
 	cmp	r0, #0
-	beq	.LBB0_90
-	b	.LBB0_89
-.LBB0_89:
-	movs	r0, #1
-	str	r0, [sp, #8]
-	b	.LBB0_91
-.LBB0_90:
-	b	.LBB0_95
-.LBB0_91:
-	b	.LBB0_92
-.LBB0_92:
-	b	.LBB0_93
-.LBB0_93:
-	ldr	r0, [sp]
-	adds	r0, #48
-	str	r0, [sp, #36]
-	b	.LBB0_94
-.LBB0_94:
-	b	.LBB0_95
-.LBB0_95:
-	ldr	r0, [sp, #4]
-	adds	r0, r0, #1
-	str	r0, [sp, #4]
-	b	.LBB0_86
-.LBB0_96:
+	beq	.LBB0_98
 	b	.LBB0_97
 .LBB0_97:
-	b	.LBB0_98
-.LBB0_98:
-	ldr	r0, [sp, #60]
-	cmp	r0, #0
-	bne	.LBB0_100
+	movs	r0, #1
+	str	r0, [sp, #8]
 	b	.LBB0_99
+.LBB0_98:
+	b	.LBB0_103
 .LBB0_99:
-	b	.LBB0_98
+	b	.LBB0_100
 .LBB0_100:
 	b	.LBB0_101
 .LBB0_101:
-	movs	r0, #1
-	str	r0, [sp, #52]
+	ldr	r0, [sp]
+	adds	r0, #48
+	str	r0, [sp, #36]
 	b	.LBB0_102
 .LBB0_102:
-	b	.LBB0_102
+	b	.LBB0_103
+.LBB0_103:
+	ldr	r0, [sp, #4]
+	adds	r0, r0, #1
+	str	r0, [sp, #4]
+	b	.LBB0_94
+.LBB0_104:
+	b	.LBB0_105
+.LBB0_105:
+	b	.LBB0_106
+.LBB0_106:
+	ldr	r0, [sp, #60]
+	cmp	r0, #0
+	bne	.LBB0_108
+	b	.LBB0_107
+.LBB0_107:
+	b	.LBB0_106
+.LBB0_108:
+	b	.LBB0_109
+.LBB0_109:
+	movs	r0, #1
+	str	r0, [sp, #52]
+	b	.LBB0_110
+.LBB0_110:
+	b	.LBB0_110
 .Lfunc_end0:
 	.size	main, .Lfunc_end0-main
 	.cantunwind

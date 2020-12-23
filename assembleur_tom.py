@@ -5,8 +5,8 @@ import re, sys, os
 regexes = [
 	(r"(?:\{(R\w+)\})", r"(?P<F\1>r(?P<\1>\\d))"),
 	(r"(?:\{(imm\d)\})", r"(?P<F\1>#(?P<\1>&?\\d+))"),
-	(r"\{cond\}", r"(?P<cond>(?:[a-z]{2})?)"),
-	(r"\{label\}", r"(?P<label>[\.\\w]+)")
+	(r"\{cond\}", r"(?P<cond>(?:[a-z]{2}))"),
+	(r"\{label(\d+)\}", r"(?P<label\1>[\.\\w]+)")
 ]
 regexes = { re.compile(k): v for k, v in regexes }
 
@@ -56,7 +56,9 @@ for k, v in {
 	"add (sp, )?sp, {imm7}":                   (0b1011_0000_0, "imm7"),
 	"sub (sp, )?sp, {imm7}":                   (0b1011_0000_1, "imm7"),	
 	# 16 - conditional branch                              
-	"b({cond})? {label}":                      (0b1101, "cond", "label")
+	"b({cond}) {label8}":                      (0b1101, "cond", "label8"),
+	# 18 - unconditional branch
+	"b {label11}":                             (0b11100, "label11")
 }.items():
 	k = k.replace("[", "\\[").replace("]", "\\]")
 	for rg, sub in regexes.items():
@@ -81,7 +83,6 @@ def assemble(line, labels, pc):
 					for c, rep in m.groupdict().items():
 						if c[0] == "F":
 							output = output.replace(f"{{{c[1:]}}}", rep)
-					print(output)
 					line = output
 				else:
 					found = True
@@ -107,9 +108,12 @@ def assemble(line, labels, pc):
 					dic[k] = (conds.index(conds_alias.get(v, v)), 4)
 				except ValueError:
 					raise Exception(f"Invalid condition: {v}")
-			elif k == "label":
+			elif k.startswith("label"):
+				width = int(k[5:])
 				try:
-					dic[k] = (labels[v] - pc - 3, 8)
+					dic[k] = (labels[v] - pc - 3, width)
+					if not (-(2 ** (width - 1)) <= abs(dic[k][0]) < 2 ** (width - 1)):
+						raise Exception(f"Jump too wide : {labels[v]} is {dic[k][0]} which does not fit in {width} bits")
 					jumps.append((pc, labels[v]))
 				except KeyError:
 					raise Exception(f"Invalid label: {v} (available: {', '.join(labels.keys())})")

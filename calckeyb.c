@@ -59,7 +59,9 @@ read:
 		goto read;
 		
 	PUTCHAR('\n');
-	PRINTRES();
+	PUTCHAR('R');
+	PUTCHAR('=');
+	PRINTRES_SIGN();
 		
 	while (!KEYBeof);
 

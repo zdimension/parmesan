@@ -56,13 +56,12 @@ main:
 	@APP
 	sub	sp, #56
 	@NO_APP
-	str	r0, [sp, #24]
 	movs	r0, #1
 	str	r0, [sp, #20]
 	str	r0, [sp, #16]
 	movs	r0, #100
 	str	r0, [sp, #4]
-	b	.LBB0_28
+	b	.LBB0_25
 .LBB0_1:
 	b	.LBB0_2
 .LBB0_2:
@@ -130,61 +129,52 @@ main:
 	str	r0, [sp, #32]
 	b	.LBB0_11
 .LBB0_11:
-	movs	r0, #1
-	cmp	r0, #0
-	bne	.LBB0_14
-	b	.LBB0_12
-.LBB0_12:
-	b	.LBB0_13
-.LBB0_13:
-	b	.LBB0_1
-.LBB0_14:
 	ldr	r0, [sp, #4]
 	cmp	r0, #113
-	bne	.LBB0_16
-	b	.LBB0_15
-.LBB0_15:
+	bne	.LBB0_13
+	b	.LBB0_12
+.LBB0_12:
 	ldr	r0, [sp, #20]
 	subs	r0, r0, #1
 	str	r0, [sp, #20]
-	b	.LBB0_25
-.LBB0_16:
+	b	.LBB0_22
+.LBB0_13:
 	ldr	r0, [sp, #4]
 	cmp	r0, #100
-	bne	.LBB0_18
-	b	.LBB0_17
-.LBB0_17:
+	bne	.LBB0_15
+	b	.LBB0_14
+.LBB0_14:
 	ldr	r0, [sp, #20]
 	adds	r0, r0, #1
 	str	r0, [sp, #20]
-	b	.LBB0_24
-.LBB0_18:
+	b	.LBB0_21
+.LBB0_15:
 	ldr	r0, [sp, #4]
 	cmp	r0, #122
-	bne	.LBB0_20
-	b	.LBB0_19
-.LBB0_19:
+	bne	.LBB0_17
+	b	.LBB0_16
+.LBB0_16:
 	ldr	r0, [sp, #16]
 	subs	r0, r0, #1
 	str	r0, [sp, #16]
-	b	.LBB0_23
-.LBB0_20:
+	b	.LBB0_20
+.LBB0_17:
 	ldr	r0, [sp, #4]
 	cmp	r0, #115
-	bne	.LBB0_22
-	b	.LBB0_21
-.LBB0_21:
+	bne	.LBB0_19
+	b	.LBB0_18
+.LBB0_18:
 	ldr	r0, [sp, #16]
 	adds	r0, r0, #1
 	str	r0, [sp, #16]
+	b	.LBB0_19
+.LBB0_19:
+	b	.LBB0_20
+.LBB0_20:
+	b	.LBB0_21
+.LBB0_21:
 	b	.LBB0_22
 .LBB0_22:
-	b	.LBB0_23
-.LBB0_23:
-	b	.LBB0_24
-.LBB0_24:
-	b	.LBB0_25
-.LBB0_25:
 	ldr	r0, [sp, #20]
 	movs	r1, #7
 	ands	r0, r1
@@ -196,22 +186,22 @@ main:
 	ldr	r0, [sp, #20]
 	ldr	r1, [sp, #12]
 	cmp	r0, r1
-	bne	.LBB0_34
-	b	.LBB0_26
-.LBB0_26:
+	bne	.LBB0_31
+	b	.LBB0_23
+.LBB0_23:
 	ldr	r0, [sp, #16]
 	ldr	r1, [sp, #8]
 	cmp	r0, r1
-	bne	.LBB0_34
-	b	.LBB0_27
-.LBB0_27:
+	bne	.LBB0_31
+	b	.LBB0_24
+.LBB0_24:
 	ldr	r0, [sp, #28]
 	adds	r0, r0, #1
 	str	r0, [sp, #28]
-	b	.LBB0_28
-.LBB0_28:
-	b	.LBB0_29
-.LBB0_29:
+	b	.LBB0_25
+.LBB0_25:
+	b	.LBB0_26
+.LBB0_26:
 	ldr	r0, [sp, #64]
 	movs	r1, #7
 	ands	r0, r1
@@ -220,40 +210,40 @@ main:
 	movs	r1, #3
 	ands	r0, r1
 	str	r0, [sp, #8]
-	b	.LBB0_30
-.LBB0_30:
+	b	.LBB0_27
+.LBB0_27:
 	ldr	r0, [sp, #20]
 	ldr	r1, [sp, #12]
 	movs	r2, #0
 	cmp	r0, r1
 	str	r2, [sp]
-	bne	.LBB0_32
-	b	.LBB0_31
-.LBB0_31:
+	bne	.LBB0_29
+	b	.LBB0_28
+.LBB0_28:
 	ldr	r0, [sp, #16]
 	ldr	r1, [sp, #8]
 	subs	r0, r0, r1
 	rsbs	r1, r0, #0
 	adcs	r0, r1
 	str	r0, [sp]
-	b	.LBB0_32
-.LBB0_32:
+	b	.LBB0_29
+.LBB0_29:
 	ldr	r0, [sp]
 	lsls	r0, r0, #31
 	cmp	r0, #0
-	bne	.LBB0_29
-	b	.LBB0_33
-.LBB0_33:
-	b	.LBB0_34
-.LBB0_34:
-	b	.LBB0_13
+	bne	.LBB0_26
+	b	.LBB0_30
+.LBB0_30:
+	b	.LBB0_31
+.LBB0_31:
+	b	.LBB0_1
 .Lfunc_end0:
 	.size	main, .Lfunc_end0-main
 	.cantunwind
 	.fnend
 
 
-	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
+	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6

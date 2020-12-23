@@ -40,10 +40,11 @@
 			PUTCHAR('0');\
 			break;\
 		}\
-		if (sign && x < 0)\
+		if (sign && RES < 0)\
 		{\
 			PUTCHAR('-');\
-			x = -x;\
+			RES = -RES;\
+			x = RESbcd;\
 		}\
 	}\
 	else\
