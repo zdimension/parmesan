@@ -20,6 +20,9 @@
 
 #define BREAK() do{BREAKpin=1;}while(0)
 
+#define NOTE(note) do{BUZZER = note | 128;}while(0)
+#define MUTE() do{BUZZER = 0;}while(0)
+
 // print RES to the TTY
 // unsigned, with fixed width (8 digits max)
 #define PRINTRES_FIX(width) __PRINTRES(0, width)

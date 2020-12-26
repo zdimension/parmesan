@@ -1,6 +1,6 @@
 // use placeholder as RAM reference
 // since we don't have absolute addressing
-#define PIN(n) ((&placeholder)[n])
+#define PIN(n) (((unsigned int volatile*)(&placeholder))[n])
 // for inputs, make the expression an rvalue to prevent writes
 #define INP(n) (PIN(n)+0)
 #define OUT(n) (PIN(n))
@@ -11,6 +11,7 @@
 #define SCRupd		OUT(3)
 #define RESETpin	OUT(4)
 #define BREAKpin	OUT(5)
+#define BUZZER		OUT(6)
 
 #define DIP1 		INP(3)
 #define DIP2 		INP(4)
@@ -23,15 +24,15 @@
 #define RESbcd		INP(11)
 
 #define INIT() \
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #56");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #120");\
+asm("sub sp, #56");\
 volatile int placeholder;
 
 #include "utils.h"

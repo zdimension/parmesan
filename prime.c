@@ -5,32 +5,32 @@
 int main()
 {
 	INIT();
-
-    for(unsigned int n=2;;n++)
-    {
-        for(unsigned int i=2;;i++)
+	
+	RES = 2;
+    PRINTRES_FIX(3);
+    PUTCHAR('\n');
+	
+    for (unsigned int n=3; ; n += 2)
+	{
+        for(unsigned int i = 2; i < n; i++)
         {
-            for(unsigned int j=2;;j++)
+            for(unsigned int j = i; j < n; j++)
             {
-                if(i*j==n)
-                {
-                    goto notprime;
-                }
-                if(i*j>n)
-                {
-                    break;
-                }
-            }
-            if(i>n)
-            {
-                break;
+				register unsigned int prod = i * j;
+				
+                if (prod > n)
+					break;
+					
+				if (prod == n)
+					goto notprime;
             }
         }
+        
         RES = n;
         PRINTRES_FIX(3);
         PUTCHAR('\n');
+        
 	notprime:
 		continue;
     }
-    while (1);
 }
