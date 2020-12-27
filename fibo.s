@@ -25,10 +25,10 @@
 	.thumb_func
 main:
 	.fnstart
-	.pad	#20
-	sub	sp, #20
+	.pad	#36
+	sub	sp, #36
 	movs	r0, #0
-	str	r0, [sp, #16]
+	str	r0, [sp, #32]
 	@APP
 	sub	sp, #120
 	@NO_APP
@@ -56,22 +56,95 @@ main:
 	@APP
 	sub	sp, #56
 	@NO_APP
-	str	r0, [sp, #12]
-	str	r0, [sp, #8]
+	str	r0, [sp, #24]
 	movs	r0, #1
-	str	r0, [sp, #4]
+	str	r0, [sp, #20]
 	b	.LBB0_1
 .LBB0_1:
-	ldr	r0, [sp, #8]
-	ldr	r1, [sp, #4]
-	adds	r0, r0, r1
-	str	r0, [sp]
-	ldr	r0, [sp, #4]
+	ldr	r0, [sp, #20]
+	str	r0, [sp, #32]
+	b	.LBB0_2
+.LBB0_2:
+	ldr	r0, [sp, #72]
+	str	r0, [sp, #12]
+	ldr	r0, [sp, #12]
+	cmp	r0, #0
+	bne	.LBB0_6
+	b	.LBB0_3
+.LBB0_3:
+	b	.LBB0_4
+.LBB0_4:
+	movs	r0, #48
+	str	r0, [sp, #28]
+	b	.LBB0_5
+.LBB0_5:
+	b	.LBB0_18
+.LBB0_6:
+	movs	r0, #0
 	str	r0, [sp, #8]
-	ldr	r0, [sp]
 	str	r0, [sp, #4]
+	b	.LBB0_7
+.LBB0_7:
+	ldr	r0, [sp, #4]
+	cmp	r0, #7
+	bgt	.LBB0_17
+	b	.LBB0_8
+.LBB0_8:
+	ldr	r0, [sp, #12]
+	movs	r1, #15
+	ands	r0, r1
+	str	r0, [sp]
+	ldr	r0, [sp, #12]
+	asrs	r0, r0, #4
+	str	r0, [sp, #12]
+	ldr	r0, [sp, #8]
+	cmp	r0, #0
+	bne	.LBB0_13
+	b	.LBB0_9
+.LBB0_9:
 	ldr	r0, [sp]
+	cmp	r0, #0
+	beq	.LBB0_11
+	b	.LBB0_10
+.LBB0_10:
+	movs	r0, #1
+	str	r0, [sp, #8]
+	b	.LBB0_12
+.LBB0_11:
+	b	.LBB0_16
+.LBB0_12:
+	b	.LBB0_13
+.LBB0_13:
+	b	.LBB0_14
+.LBB0_14:
+	ldr	r0, [sp]
+	adds	r0, #48
+	str	r0, [sp, #28]
+	b	.LBB0_15
+.LBB0_15:
+	b	.LBB0_16
+.LBB0_16:
+	ldr	r0, [sp, #4]
+	adds	r0, r0, #1
+	str	r0, [sp, #4]
+	b	.LBB0_7
+.LBB0_17:
+	b	.LBB0_18
+.LBB0_18:
+	b	.LBB0_19
+.LBB0_19:
+	movs	r0, #10
+	str	r0, [sp, #28]
+	b	.LBB0_20
+.LBB0_20:
+	ldr	r0, [sp, #24]
+	ldr	r1, [sp, #20]
+	adds	r0, r0, r1
 	str	r0, [sp, #16]
+	ldr	r0, [sp, #20]
+	str	r0, [sp, #24]
+	ldr	r0, [sp, #16]
+	str	r0, [sp, #20]
 	b	.LBB0_1
 .Lfunc_end0:
 	.size	main, .Lfunc_end0-main
@@ -79,7 +152,7 @@ main:
 	.fnend
 
 
-	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
+	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6
