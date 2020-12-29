@@ -25,9 +25,9 @@
 
 #define __DIVPROLOGUE(i, j) asm("movs r2, %[input_i]\nmovs r3, %[input_j]" : : [input_i] "r" (i), [input_j] "r" (j) : "r2", "r3");
 
-#define DIV(i, j, quot) do{__DIVPROLOGUE(i, j);quot = R2divR3;}while(0)
-#define DIVMOD(i, j, quot, mod) do{__DIVPROLOGUE(i, j);quot = R2divR3;mod = R2modR3;}while(0)
-#define MOD(i, j, mod) do{__DIVPROLOGUE(i, j);mod = R2modR3;}while(0)
+#define DIV(i, j, quot) do{__DIVPROLOGUE(i, j);*quot = R2divR3;}while(0)
+#define DIVMOD(i, j, quot, mod) do{__DIVPROLOGUE(i, j);*quot = R2divR3;*mod = R2modR3;}while(0)
+#define MOD(i, j, mod) do{__DIVPROLOGUE(i, j);*mod = R2modR3;}while(0)
 
 // print RES to the TTY
 // unsigned, with fixed width (8 digits max)

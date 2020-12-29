@@ -1,7 +1,5 @@
 #include "pins.h"
 
-#define putchar(c) { TTYchr = c; }
-
 void run()
 {
 	INIT();
@@ -15,10 +13,9 @@ void run()
         for (unsigned int i = 2; i * i <= n; i++)
         {
 			int mod;
-			MOD(n, i, mod);
+			MOD(n, i, &mod);
 			if (mod == 0)
 				goto notprime;
-				
         }
         
         RES = n;
