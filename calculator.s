@@ -18,45 +18,22 @@
 	.eabi_attribute	26, 2
 	.eabi_attribute	14, 0
 	.file	"calculator.c"
-	.globl	main
+	.globl	run
 	.p2align	1
-	.type	main,%function
+	.type	run,%function
 	.code	16
 	.thumb_func
-main:
+run:
 	.fnstart
-	.pad	#24
-	sub	sp, #24
+	.pad	#80
+	sub	sp, #80
+	@APP
+	sub	sp, #508
+	@NO_APP
+	@APP
+	sub	sp, #452
+	@NO_APP
 	movs	r0, #0
-	str	r0, [sp, #20]
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #56
-	@NO_APP
-	str	r0, [sp, #16]
 	str	r0, [sp, #12]
 	movs	r0, #1
 	str	r0, [sp, #8]
@@ -116,12 +93,12 @@ main:
 .LBB0_9:
 	b	.LBB0_1
 .Lfunc_end0:
-	.size	main, .Lfunc_end0-main
+	.size	run, .Lfunc_end0-run
 	.cantunwind
 	.fnend
 
 
-	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
+	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6

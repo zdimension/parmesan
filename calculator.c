@@ -4,7 +4,7 @@
 #define OPb DIP2
 #define CMD DIP3
 
-int main() {
+void run() {
 	INIT();
 	
 	int ADD = 0;

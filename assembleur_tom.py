@@ -6,7 +6,10 @@ import sys
 
 regexes = [
     (r"(?:\{(R\w+)\})", r"(?P<F\1>r(?P<\1>\\d))"),
-    (r"(?:\{(imm\d)\})", r"(?P<F\1>#(?P<\1>&?\\d+))"),
+    (r"(?:\{(imm3)\})", r"(?P<F\1>#(?P<\1>&?\\d{1}))"),
+    (r"(?:\{(imm5)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,2}))"),
+    (r"(?:\{(imm7)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,3}))"),
+    (r"(?:\{(imm8)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,3}))"),
     (r"\{cond\}", r"(?P<cond>(?:[a-z]{2}))"),
     (r"\{label(\d+)\}", r"(?P<label\1>[\.\\w]+)")
 ]
@@ -65,7 +68,7 @@ for k, v in {
     k = k.replace("[", "\\[").replace("]", "\\]")
     for rg, sub in regexes.items():
         k = rg.sub(sub, k)
-    ins[re.compile("^" + k + "$")] = v
+    ins[re.compile(f"^{k}$")] = v
 
 log = []
 jumps = []
@@ -138,7 +141,7 @@ def assemble(line, labels, pc):
         if width != 0:
             val &= 2 ** width - 1
         res += val
-    return res, f"{pc * 2:04x} │ {res:04x} │ {line:20} │ {', '.join(f'{k}={v[0] if v else str()}' for k, v in dic.items() if k[0] != 'F'):20}"
+    return res, f"{pc * 2:04x} │ {res:04x} │ {line:20} │ {', '.join(f'{k}={v[0] if v else str()}' for k, v in dic.items() if k[0] != 'F'):25}"
 
 
 fn = sys.argv[1]
@@ -174,7 +177,7 @@ for i, line in enumerate(lines):
                 pc += 1
                 break
 pc = 0
-columns = f"║  PC  │  OP  │ {'Instruction':^20} │ {'Arguments':^20} ║"
+columns = f"║  PC  │  OP  │ {'Instruction':^20} │ {'Arguments':^25} ║"
 sep = "╠" + "".join("═╪"[c == "│"] for c in columns[1:-1]) + "╣"
 data = []
 for i, line in instrs:

@@ -18,43 +18,20 @@
 	.eabi_attribute	26, 2
 	.eabi_attribute	14, 0
 	.file	"furelise.c"
-	.globl	main
+	.globl	run
 	.p2align	1
-	.type	main,%function
+	.type	run,%function
 	.code	16
 	.thumb_func
-main:
+run:
 	.fnstart
-	.pad	#8
-	sub	sp, #8
-	movs	r0, #0
-	str	r0, [sp, #4]
+	.pad	#64
+	sub	sp, #64
 	@APP
-	sub	sp, #120
+	sub	sp, #508
 	@NO_APP
 	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #56
+	sub	sp, #452
 	@NO_APP
 	b	.LBB0_1
 .LBB0_1:
@@ -798,7 +775,7 @@ main:
 .LBB0_247:
 	b	.LBB0_1
 .Lfunc_end0:
-	.size	main, .Lfunc_end0-main
+	.size	run, .Lfunc_end0-run
 	.cantunwind
 	.fnend
 

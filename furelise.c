@@ -1,6 +1,6 @@
 #include "pins.h"
 
-int main()
+void run()
 {
 	INIT();
 

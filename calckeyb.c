@@ -16,7 +16,7 @@
 	}\
 }
 
-int main()
+void run() 
 {
 	INIT();
 	
@@ -35,6 +35,8 @@ int main()
 	PUTCHAR('+');
 	PUTCHAR('-');
 	PUTCHAR('*');
+	PUTCHAR('/');
+	PUTCHAR('%');
 	PUTCHAR('&');
 	PUTCHAR('|');
 	PUTCHAR('^');
@@ -49,6 +51,10 @@ read:
 		RES = a - b;
 	else if (choice == '*')
 		RES = a * b;
+	else if (choice == '/')
+		DIV(a, b, RES);
+	else if (choice == '%')
+		MOD(a, b, RES);
 	else if (choice == '&')
 		RES = a & b;
 	else if (choice == '|')

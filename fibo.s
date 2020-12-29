@@ -18,44 +18,22 @@
 	.eabi_attribute	26, 2
 	.eabi_attribute	14, 0
 	.file	"fibo.c"
-	.globl	main
+	.globl	run
 	.p2align	1
-	.type	main,%function
+	.type	run,%function
 	.code	16
 	.thumb_func
-main:
+run:
 	.fnstart
-	.pad	#36
-	sub	sp, #36
+	.pad	#92
+	sub	sp, #92
+	@APP
+	sub	sp, #508
+	@NO_APP
+	@APP
+	sub	sp, #452
+	@NO_APP
 	movs	r0, #0
-	str	r0, [sp, #32]
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #56
-	@NO_APP
 	str	r0, [sp, #24]
 	movs	r0, #1
 	str	r0, [sp, #20]
@@ -147,7 +125,7 @@ main:
 	str	r0, [sp, #20]
 	b	.LBB0_1
 .Lfunc_end0:
-	.size	main, .Lfunc_end0-main
+	.size	run, .Lfunc_end0-run
 	.cantunwind
 	.fnend
 
