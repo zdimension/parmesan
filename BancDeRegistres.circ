@@ -298,9 +298,13 @@
     </comp>
     <comp lib="4" loc="(410,1020)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg7"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="4" loc="(410,520)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg2"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="0" loc="(170,210)" name="Pin">
       <a name="width" val="3"/>
@@ -312,6 +316,8 @@
     <comp lib="0" loc="(200,480)" name="Power"/>
     <comp lib="4" loc="(410,620)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg3"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="0" loc="(170,140)" name="Pin">
       <a name="width" val="32"/>
@@ -319,9 +325,13 @@
     </comp>
     <comp lib="4" loc="(410,820)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg5"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="4" loc="(410,320)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg0"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="2" loc="(210,480)" name="Decoder">
       <a name="selloc" val="tr"/>
@@ -329,12 +339,18 @@
     </comp>
     <comp lib="4" loc="(410,920)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg6"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="4" loc="(410,720)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg4"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="4" loc="(410,420)" name="Register">
       <a name="width" val="32"/>
+      <a name="label" val="Reg1"/>
+      <a name="showInTab" val="true"/>
     </comp>
     <comp lib="2" loc="(540,140)" name="Multiplexer">
       <a name="facing" val="north"/>

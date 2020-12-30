@@ -1,6 +1,9 @@
-// use placeholder as RAM reference
-// since we don't have absolute addressing
-#define PIN(n) ((&placeholder)[n])
+#define INIT() \
+asm("sub sp, #508");\
+asm("sub sp, #452");\
+volatile int PINS[16];
+
+#define PIN(n) (((volatile int*)PINS)[n])
 // for inputs, make the expression an rvalue to prevent writes
 #define INP(n) (PIN(n)+0)
 #define OUT(n) (PIN(n))
@@ -10,6 +13,8 @@
 #define SCRbuf		PIN(2)
 #define SCRupd		OUT(3)
 #define RESETpin	OUT(4)
+#define BREAKpin	OUT(5)
+#define BUZZER		OUT(6)
 
 #define DIP1 		INP(3)
 #define DIP2 		INP(4)
@@ -19,30 +24,8 @@
 #define JOYx		INP(8)
 #define JOYy		INP(9)
 #define RNG32		INP(10)
+#define RESbcd		INP(11)
+#define R2divR3		INP(12)
+#define R2modR3		INP(13)
 
-#define BITVAL(x,y) (1 << ((7-x) | ((y & 3) << 3)))
-#define PIXSET(x,y)	do{SCRbuf |= BITVAL(x, y);}while(0)
-#define PIXCLR(x,y)	do{SCRbuf &= ~BITVAL(x, y);}while(0)
-#define SCRUPD() do{SCRupd = 1;}while(0)
-
-#define CLEAR() do{PUTCHAR('\f');}while(0)
-
-#define RESET() do{RESETpin = 1; while(1);}while(0)
-
-#define WAITKEY() do{while(!KEYBeof);}while(0)
-
-#define READKEY(x) do{WAITKEY(); *x=KEYBchr;}while(0)
-
-#define PUTCHAR(x) do{TTYchr=x;}while(0)
-
-#define INIT() \
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #120");\
-__asm__("sub sp, #56");\
-volatile int placeholder = 0;
+#include "utils.h"

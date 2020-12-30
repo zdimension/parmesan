@@ -6,3 +6,5 @@ tests/controller_cpp/cmake-build-debug/
 tests_emmy
 
 tests_emmy.txt
+
+.idea

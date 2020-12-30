@@ -2,7 +2,7 @@
 
 #define putchar(c) { TTYchr = c; }
 
-int main()
+void run()
 {
 	INIT();
 	putchar('P');

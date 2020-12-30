@@ -1,6 +1,6 @@
 #include "pins.h"
 
-int main()
+void run()
 {
 	INIT();
 	
@@ -10,48 +10,41 @@ int main()
 	int key = 'd';
 	goto targetInit;
 		
-loopStart:
-	PIXSET(tx, ty);
-
-	PIXSET(x, y);
-	
-	SCRUPD();
-	
-	if (KEYBeof)
+	while (1)
 	{
-		key = KEYBchr;
-	}
-	
-	PIXCLR(x, y);
-	
-	if (0)
-	{
-		restart:
-			goto loopStart;
-	}
-	
-	if (key == 'q')
-		x--;
-	else if (key == 'd')
-		x++;
-	else if (key == 'z')
-		y--;
-	else if (key == 's')
-		y++;
+		PIXSET(tx, ty);
+		PIXSET(x, y);
 		
-	x &= 7;
-	y &= 3;
-	
-	if (x == tx && y == ty)
-	{
-		RES++;
-targetInit:
-		do
+		SCRUPD();
+		
+		if (KEYBeof)
 		{
-			tx = RNG32 & 7;
-			ty = RNG32 & 3;
-		} while (x == tx && y == ty);
+			key = KEYBchr;
+		}
+		
+		PIXCLR(x, y);
+		
+		if (key == 'q')
+			x--;
+		else if (key == 'd')
+			x++;
+		else if (key == 'z')
+			y--;
+		else if (key == 's')
+			y++;
+			
+		x &= 7;
+		y &= 3;
+		
+		if (x == tx && y == ty)
+		{
+			RES++;
+	targetInit:
+			do
+			{
+				tx = RNG32 & 7;
+				ty = RNG32 & 3;
+			} while (x == tx && y == ty);
+		}
 	}
-	
-	goto restart;
 }

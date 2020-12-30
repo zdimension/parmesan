@@ -1,6 +1,6 @@
 #include "pins.h"
 
-int main()
+void run()
 {
 	INIT();
 	
@@ -9,9 +9,11 @@ int main()
 	int suiv;
 	while (1)
 	{
+		RES = b;
+		PRINTRES();
+		PUTCHAR('\n');
 		suiv = a + b;
 		a = b;
 		b = suiv;
-		RES = suiv;
 	}
 }
