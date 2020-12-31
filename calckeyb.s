@@ -296,6 +296,8 @@ run:
 	@NO_APP
 	ldr	r0, [sp, #120]
 	str	r0, [sp, #20]
+	ldr	r0, [sp, #20]
+	str	r0, [sp, #76]
 	b	.LBB0_79
 .LBB0_66:
 	ldr	r0, [sp, #28]
@@ -311,6 +313,8 @@ run:
 	@NO_APP
 	ldr	r0, [sp, #124]
 	str	r0, [sp, #16]
+	ldr	r0, [sp, #16]
+	str	r0, [sp, #76]
 	b	.LBB0_78
 .LBB0_68:
 	ldr	r0, [sp, #28]

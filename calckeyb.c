@@ -36,9 +36,9 @@ read:
 	else if (choice == '*')
 		RES = a * b;
 	else if (choice == '/')
-		DIV(a, b, &RES);
+		RES = DIV(a, b);
 	else if (choice == '%')
-		MOD(a, b, &RES);
+		RES = MOD(a, b);
 	else if (choice == '&')
 		RES = a & b;
 	else if (choice == '|')
