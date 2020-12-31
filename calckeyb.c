@@ -1,21 +1,5 @@
 #include "pins.h"
 
-#define READINT(x) {\
-	*x = 0;\
-	int cur;\
-	while(1)\
-	{\
-		READKEY(&cur);\
-		if (cur == '\n')\
-			break;\
-		if (cur < '0' || cur > '9')\
-			continue;\
-		TTYchr = cur;\
-		*x *= 10;\
-		*x += cur - '0' + 1;\
-	}\
-}
-
 void run() 
 {
 	INIT();
