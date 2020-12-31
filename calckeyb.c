@@ -8,12 +8,12 @@ void run()
 	
 	PUTCHAR('A');
 	PUTCHAR('=');
-	READINT(&a);
+	a = READINT();
 	PUTCHAR('\n');
 	
 	PUTCHAR('B');
 	PUTCHAR('=');
-	READINT(&b);
+	b = READINT();
 	PUTCHAR('\n');
 	
 	PUTCHAR('+');
@@ -27,7 +27,7 @@ void run()
 
 	int choice;
 read:
-	READKEY(&choice);
+	choice = READKEY();
 	
 	if (choice == '+')
 		RES = a + b;

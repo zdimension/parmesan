@@ -14,7 +14,7 @@
 
 #define WAITKEY() do{while(!KEYBeof);}while(0)
 
-#define READKEY(x) do{WAITKEY(); *x=KEYBchr;}while(0)
+#define READKEY() ({WAITKEY(); KEYBchr;})
 
 #define PUTCHAR(x) do{TTYchr=x;}while(0)
 
@@ -23,11 +23,11 @@
 #define NOTE(note) do{BUZZER = note | 128;}while(0)
 #define MUTE() do{BUZZER = 0;}while(0)
 
-#define __DIVPROLOGUE(i, j) asm("movs r2, %[input_i]\nmovs r3, %[input_j]" : : [input_i] "r" (i), [input_j] "r" (j) : "r2", "r3");
+#define __DIVPROLOGUE(i, j) asm("movs r2, %[input_i]\nmovs r3, %[input_j]" : : [input_i] "r" (i), [input_j] "r" (j) : "r2", "r3")
 
-#define DIV(i, j, quot) do{__DIVPROLOGUE(i, j);*quot = R2divR3;}while(0)
+#define DIV(i, j, quot) ({__DIVPROLOGUE(i, j);R2divR3;})
 #define DIVMOD(i, j, quot, mod) do{__DIVPROLOGUE(i, j);*quot = R2divR3;*mod = R2modR3;}while(0)
-#define MOD(i, j, mod) do{__DIVPROLOGUE(i, j);*mod = R2modR3;}while(0)
+#define MOD(i, j, mod) ({__DIVPROLOGUE(i, j);R2modR3;})
 
 // print RES to the TTY
 // unsigned, with fixed width (8 digits max)
@@ -38,7 +38,6 @@
 
 // signed, automatic width
 #define PRINTRES_SIGN() __PRINTRES(1, 0)
-
 
 #define __PRINTRES(sign, width) do {\
 	int x = RESbcd;\
@@ -74,18 +73,18 @@
 	}\
 } while(0)
 
-#define READINT(x) {\
-	*x = 0;\
+#define READINT() ({\
+	int x = 0;\
 	int cur;\
 	while(1)\
 	{\
-		READKEY(&cur);\
+		cur = READKEY();\
 		if (cur == '\n')\
 			break;\
 		if (cur < '0' || cur > '9')\
 			continue;\
 		TTYchr = cur;\
-		*x *= 10;\
-		*x += cur - '0' + 1;\
+		x *= 10;\
+		x += cur - '0' + 1;\
 	}\
 }

@@ -1,18 +1,16 @@
 #include "pins.h"
 
-#define putchar(c) { TTYchr = c; }
-
 void run()
 {
 	INIT();
-	putchar('P');
-	putchar('A');
-	putchar('R');
-	putchar('M');
-	putchar('E');
-	putchar('S');
-	putchar('A');
-	putchar('N');
-	putchar('!');
+	PUTCHAR('P');
+	PUTCHAR('A');
+	PUTCHAR('R');
+	PUTCHAR('M');
+	PUTCHAR('E');
+	PUTCHAR('S');
+	PUTCHAR('A');
+	PUTCHAR('N');
+	PUTCHAR('!');
 	while (1);
 }
