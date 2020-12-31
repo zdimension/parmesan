@@ -160,6 +160,8 @@ for i, line in enumerate(lines):
         continue
     if "@" in line:
         line = line[:line.index("@")]
+    if "add\tr7, sp" in line or "push\t{" in line:
+        continue
     while True:
         line = line.strip().lower()
         if not line:
