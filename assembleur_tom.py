@@ -144,7 +144,8 @@ def assemble(line, labels, pc):
     return res, f"{pc * 2:04x} │ {res:04x} │ {line:20} │ {', '.join(f'{k}={v[0] if v else str()}' for k, v in dic.items() if k[0] != 'F'):25}"
 
 
-fn = sys.argv[1]
+no_optim = "-O0" in sys.argv
+fn = sys.argv[-1]
 fp = open(fn, "r")
 fo = open(os.path.splitext(fn)[0] + ".bin", "w")
 rlbl = re.compile(r"^([.\w]+)\s*:")
@@ -155,12 +156,13 @@ ignored_lines = [i for i, l in enumerate(lines[:-1])
                  if l.startswith("\tb\t") and lines[i + 1] == f"{l[3:-1]}:\n"]  # fix for clang's redundant jumps
 instrs = []
 for i, line in enumerate(lines):
-    if i in ignored_lines:
-        continue
+    if not no_optim:
+        if i in ignored_lines:
+            continue
+        if "add\tr7, sp" in line or "push\t{" in line:  # fix for clang's frame pointer creation
+            continue
     if "@" in line:
         line = line[:line.index("@")]
-    if "add\tr7, sp" in line or "push\t{" in line:  # fix for clang's frame pointer creation
-        continue
     while True:
         if not (line := line.strip().lower()):
             break
