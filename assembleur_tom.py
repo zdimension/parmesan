@@ -79,7 +79,7 @@ def assemble(line, labels, pc):
         instr, args = line.split(None, 1)
     except:
         raise Exception(f"Invalid line: {line}")
-    oline = line = instr + " " + ", ".join(map(str.strip, filter(len, args.split(","))))
+    oline = line = instr + " " + ", ".join(map(str.strip, filter(bool, args.split(","))))
     found = False
     while not found:
         for i, output in ins.items():
@@ -151,8 +151,7 @@ rlbl = re.compile(r"^([.\w]+)\s*:")
 pc = 0
 labels = {}
 lines = [l.lower() for l in fp.readlines()]
-ignored_lines = [i
-                 for i, l in enumerate(lines[:-1])
+ignored_lines = [i for i, l in enumerate(lines[:-1])
                  if l.startswith("\tb\t") and lines[i + 1] == f"{l[3:-1]}:\n"]  # fix for clang's redundant jumps
 instrs = []
 for i, line in enumerate(lines):
@@ -160,14 +159,12 @@ for i, line in enumerate(lines):
         continue
     if "@" in line:
         line = line[:line.index("@")]
-    if "add\tr7, sp" in line or "push\t{" in line:
+    if "add\tr7, sp" in line or "push\t{" in line:  # fix for clang's frame pointer creation
         continue
     while True:
-        line = line.strip().lower()
-        if not line:
+        if not (line := line.strip().lower()):
             break
-        m = rlbl.match(line)
-        if m:
+        if m := rlbl.match(line):
             labels[m.group(1)] = pc
             line = line[line.index(":") + 1:]
             continue
@@ -197,7 +194,7 @@ print(columns)
 print(sep)
 
 
-def set(s, i, c):
+def subst(s, i, c):
     if len(s) < i:
         s = s.ljust(i)
     return s[:i] + c + s[i + len(c):]
@@ -206,16 +203,13 @@ def set(s, i, c):
 root = len(columns) + 1
 for depth, (src, dst) in enumerate(jumps):
     dsh = "─" * 3
-    start, end = "╮", "╯"
-    step = 1
-    if dst < src:
-        start, end = end, start
-        step = -1
+    step = 1 if dst >= src else -1
+    start, end = ("╮", "╯")[::step]
     pos = ((max((len(l) for l in log[min(src, dst):max(src, dst)]), default=root) - root + 1) // 6) * (len(dsh) + 3)
-    log[src] = set(log[src], root + pos, ">" + dsh + start)
+    log[src] = subst(log[src], root + pos, ">" + dsh + start)
     for i in range(src + step, dst, step):
-        log[i] = set(log[i], root + pos + len(dsh) + 1, "│")
-    log[dst] = set(log[dst], root + pos, "<" + dsh + end)
+        log[i] = subst(log[i], root + pos + len(dsh) + 1, "│")
+    log[dst] = subst(log[dst], root + pos, "<" + dsh + end)
 for line in log:
     print(line)
 print(sep)
