@@ -135,7 +135,7 @@ def assemble(line, labels, pc):
         val = nval
         if type(val) == str:
             val, width = dic[val]
-            if nval.startswith("imm") and "sp" in line:
+            if nval.startswith("imm") and "sp" in line and not no_div_4:
                 val >>= 2
         res <<= width
         if width != 0:
@@ -144,7 +144,7 @@ def assemble(line, labels, pc):
     return res, f"{pc * 2:04x} │ {res:04x} │ {line:20} │ {', '.join(f'{k}={v[0] if v else str()}' for k, v in dic.items() if k[0] != 'F'):25}"
 
 
-no_optim = "-O0" in sys.argv
+no_optim, no_div_4 = [param in sys.argv for param in ("-O0", "-nd4")]
 fn = sys.argv[-1]
 fp = open(fn, "r")
 fo = open(os.path.splitext(fn)[0] + ".bin", "w")
