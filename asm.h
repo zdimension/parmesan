@@ -19,6 +19,7 @@ enum instruction {
 enum instruction s2e(char *);
 void assembler(char *, char *);
 
+//LSLS, LSRS, ASRS
 typedef struct instruction_LLA
 {
   unsigned int rd    :3;
@@ -28,6 +29,7 @@ typedef struct instruction_LLA
   unsigned int idcode:2;
 } Inst_shift;
 
+//ADDS, SUBS, ADDS, SUBS
 typedef struct
 {
   unsigned int rd    :3;
@@ -37,6 +39,7 @@ typedef struct
   unsigned int idcode:2;
 } Inst_ASA;
 
+//MOVS
 typedef struct
 {
   unsigned int imm8  :8;
@@ -45,7 +48,7 @@ typedef struct
   unsigned int idcode:2;
 } Inst_Movs;
 
-
+//Les instructions Data processing
 typedef struct
 {
   unsigned int rdn   :3;
@@ -54,7 +57,7 @@ typedef struct
   unsigned int idcode:6;
 } Inst_data;
 
-
+// STR, LDR Access au memore
 typedef struct
 {
   unsigned int imm8  :8;
@@ -63,7 +66,7 @@ typedef struct
   unsigned int idcode:4;
 } Inst_load;
 
-
+//ADD SUB pour le pointeur sp
 typedef struct
 {
   unsigned int imm7  :7;
@@ -71,7 +74,7 @@ typedef struct
   unsigned int idcode:4;
 } Inst_stack;
 
-
+//Branch
 typedef struct
 {
   signed int imm8  :8;
