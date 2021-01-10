@@ -190,6 +190,33 @@ void assembler(char *FILE_IN, char *FILE_OUT){
       
       break;
 
+      //Les instructions Data processing
+    case ands:
+    case eors:
+    case adcs :
+    case sbcs :
+    case rors :
+    case tst :
+    case rsbs :
+    case cmp :
+    case cmn :
+    case orrs :
+    case muls :
+    case bics :
+    case mvns :
+      if(show_inst == 1){
+	if(inst == muls) fprintf(out,"\n%-20s :",CmdLine);
+	else fprintf(out,"\n%-19s :",CmdLine);
+      }
+      if ((num = sscanf(CmdLine,"%*s\tr%d, r%d",&rdn,&rm) ) == 2){
+	order_data.idcode = 16;
+	order_data.opcode = inst - ands;  //and == 6
+	order_data.rdn = rdn;
+	order_data.rm  = rm;
+	addr++;
+	fprintf(out,"%04hx ",order_data);
+      }
+      break;
       
     case str :
     case ldr :
