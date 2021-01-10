@@ -14,6 +14,7 @@ int main(int argc, char *argv[]){
     exit(EXIT_FAILURE);
   }
 
+  //options -i pour afficher les detail des instructions
   if(!strcmp(argv[1],"-i")){
     show_inst = 1;
     argv++;
@@ -47,7 +48,11 @@ void assembler(char *FILE_IN, char *FILE_OUT){
   int pc = 0;
   
   enum instruction inst;
-  
+
+  /**
+   * Chercher et stocker les label qui se termine par :  
+   * Eg:  [Label :]
+   */
   while(fscanf(in,"%[^\n]",CmdLine)!=EOF){
     fgetc(in);
     sscanf(CmdLine,"%s",debut);
@@ -68,12 +73,14 @@ void assembler(char *FILE_IN, char *FILE_OUT){
     }
   }
 
+  //revient au debut du fichier entree
   rewind(in);
   debut[0] = '\0';  // init
 
   int addr = 0;
   int num  = 0;
 
+  //les operations et les donnee d'une instruction
   int r[7] = {0};
   int rn, rd, rdn, rm, rt, imm3, imm5, imm7, imm8;
   char labelRead[10];
@@ -87,18 +94,28 @@ void assembler(char *FILE_IN, char *FILE_OUT){
   Inst_branch order_b;
 
   fprintf(out,"v2.0 raw\n");
-
+  
   while(fscanf(in,"%[^\n]",CmdLine)!=EOF){
     fgetc(in);
+
+    // Detecter si c'est une instruction
     sscanf(CmdLine,"%s",debut);
     
-    inst = s2e(debut);
-   
+    inst = s2e(debut);// string to enum , la Conversion de type
+
+    /**
+     * Chercher les instuction du Langue d'assembleur, et il va lire les parametres donnee 
+     * et print les instructions.
+     * Vu qu'il y a des instructions de meme composition, j'ai mis des case qui ne fait rien.
+     */
     switch(inst){
+      
     case lsls :
     case lsrs :
     case asrs :
       if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
+
+      //LSLS_imm, LSRS_imm, ASRS_imm
       if ((num = sscanf(CmdLine,"%*s\tr%d, r%d, #%d",&rd,&rm,&imm5)) == 3){ // !!\n
        
 	order_lla.idcode = 0;
@@ -111,6 +128,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_lla);
 	
       }
+      
+      // LSLS, LSRS, ASRS
       else if( num == 2 ){
 	order_data.idcode = 16;
 	order_data.opcode = inst + 2;  // lsls_imm == 0, lsls == 2
@@ -120,10 +139,13 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_data);
       }
       break;
+
       
     case adds :
     case subs :
       if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
+
+      // ADDS_imm, SUBS_imm
       if(sscanf(CmdLine,"%*s\tr%d, r%d, #%d",&rd,&rn,&imm3) == 3){
 	r[rd] = r[rn] + ( inst == adds ? imm3 : -imm3 ); // adds et subs
 
@@ -135,8 +157,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	addr++;
 	
 	fprintf(out,"%04hx ",order_asa);
-	
       }
+      //ADDS, SUBS
       else if( sscanf(CmdLine,"%*s\tr%d, r%d, r%d",&rd,&rn,&rm) == 3){
 	r[rd] = r[rn] + ( inst == adds ? r[rm] : -r[rm] ); // adds et subs
 	
@@ -149,6 +171,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_asa);
       }
       break;
+
+      // MOVS
     case movs :
       if(show_inst == 1) fprintf(out,"\n%-20s :",CmdLine);
       if ( sscanf(CmdLine,"%*s\tr%d, #%d",&rd, &imm8) > 0){
@@ -166,36 +190,11 @@ void assembler(char *FILE_IN, char *FILE_OUT){
       
       break;
 
-    case ands:
-    case eors:
-    case adcs :
-    case sbcs :
-    case rors :
-    case tst :
-    case rsbs : // problem
-    case cmp :
-    case cmn :
-    case orrs :
-    case muls : // problem
-    case bics :
-    case mvns :
-      if(show_inst == 1){
-	if(inst == muls) fprintf(out,"\n%-20s :",CmdLine);
-	else fprintf(out,"\n%-19s :",CmdLine);
-      }
-      if ((num = sscanf(CmdLine,"%*s\tr%d, r%d",&rdn,&rm) ) == 2){
-	order_data.idcode = 16;
-	order_data.opcode = inst - ands;  // !!!!!!!!!!!!and == 6
-	order_data.rdn = rdn;
-	order_data.rm  = rm;
-	addr++;
-	fprintf(out,"%04hx ",order_data);
-      }
-      break;
-     
+      
     case str :
     case ldr :
       if(show_inst == 1) fprintf(out,"\n%-19s :",CmdLine);
+       // STR_imm, LDR_imm 
       if ((num = sscanf(CmdLine,"%*s\tr%d, [sp, #%d]",&rt, &imm8) ) == 2){
 	
 	order_load.idcode = 9;
@@ -205,6 +204,7 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	addr++;
 	fprintf(out,"%04hx ",order_load);
       }
+      //STR, LDR eg: str    r0, [sp]
       else if(num == 1){
 	
 	order_load.idcode = 9;
@@ -215,7 +215,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_load);
       }
       break;
-      
+
+      //ADD SUB pour le pointeur sp
     case add :
     case sub :
       if(show_inst == 1) fprintf(out,"\n%-19s :",CmdLine);
@@ -228,6 +229,8 @@ void assembler(char *FILE_IN, char *FILE_OUT){
 	fprintf(out,"%04hx ",order_stack);
       }
       break;
+
+      // Branch
     case beq :
     case bne :
     case bcs :
