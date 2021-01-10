@@ -7,9 +7,7 @@ import sys
 regexes = [
     (r"(?:\{(R\w+)\})", r"(?P<F\1>r(?P<\1>\\d))"),
     (r"(?:\{(imm3)\})", r"(?P<F\1>#(?P<\1>&?\\d{1}))"),
-    (r"(?:\{(imm5)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,2}))"),
-    (r"(?:\{(imm7)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,3}))"),
-    (r"(?:\{(imm8)\})", r"(?P<F\1>#(?P<\1>&?\\d{1,3}))"),
+    (r"(?:\{(imm\d)\})", r"(?P<F\1>#(?P<\1>&?\\d+))"),
     (r"\{cond\}", r"(?P<cond>(?:[a-z]{2}))"),
     (r"\{label(\d+)\}", r"(?P<label\1>[\.\\w]+)")
 ]
@@ -100,16 +98,15 @@ def assemble(line, labels, pc):
         if k.startswith("imm"):
             width = int(k[3:])
             dic[k] = (0 if v is None else (int(v[1:], 16) if v[0] == "&" else int(v)), width)
-            if not (0 <= dic[k][0] < 2 ** width * (4 if "sp" in line else 1)):
-                raise Exception(f"Immediate value out of bounds: {v}")
+            valmax = 2 ** width * (4 if "sp" in line else 1)
+            if not (0 <= dic[k][0] < valmax):
+                raise Exception(f"Immediate value out of bounds: {v}, should be >= 0 and < {valmax}")
         elif v is not None:
             if k[0] == "R":
                 dic[k] = (int(v), 3)
                 if not (0 <= dic[k][0] <= 7):
-                    raise Exception(f"Invalid register: {v}")
+                    raise Exception(f"Invalid register: {v}, should be between r0 and r7")
             elif k == "cond":
-                if not v:
-                    v = "al"
                 try:
                     dic[k] = (conds.index(conds_alias.get(v, v)), 4)
                 except ValueError:
@@ -118,7 +115,7 @@ def assemble(line, labels, pc):
                 width = int(k[5:])
                 try:
                     dic[k] = (labels[v] - pc - 3, width)
-                    if not (-(2 ** (width - 1)) <= abs(dic[k][0]) < 2 ** (width - 1)):
+                    if not (abs(dic[k][0]) < 2 ** (width - 1)):
                         raise Exception(
                             f"Jump too wide : {labels[v]} is {dic[k][0]} which does not fit in {width} bits")
                     jumps.append((pc, labels[v]))
@@ -149,7 +146,6 @@ fn = sys.argv[-1]
 fp = open(fn, "r")
 fo = open(os.path.splitext(fn)[0] + ".bin", "w")
 rlbl = re.compile(r"^([.\w]+)\s*:")
-pc = 0
 labels = {}
 lines = [l.lower() for l in fp.readlines()]
 ignored_lines = [i for i, l in enumerate(lines[:-1])
@@ -163,25 +159,18 @@ for i, line in enumerate(lines):
             continue
     if "@" in line:
         line = line[:line.index("@")]
-    while True:
-        if not (line := line.strip().lower()):
-            break
-        if m := rlbl.match(line):
-            labels[m.group(1)] = pc
+    while line := line.strip():
+        if m := rlbl.match(line):  # line is a label
+            labels[m.group(1)] = len(instrs)
             line = line[line.index(":") + 1:]
-            continue
         else:
-            if line[0] == ".":
-                break
-            else:
+            if line[0] != ".":
                 instrs.append((i + 1, line))
-                pc += 1
-                break
-pc = 0
+            break
 columns = f"║  PC  │  OP  │ {'Instruction':^20} │ {'Arguments':^25} ║"
 sep = "╠" + "".join("═╪"[c == "│"] for c in columns[1:-1]) + "╣"
 data = []
-for i, line in instrs:
+for pc, (i, line) in enumerate(instrs):
     try:
         opc, stat = assemble(line, labels, pc)
         data.append(opc)
@@ -190,7 +179,6 @@ for i, line in instrs:
         print(f"Build error on line {i}: {line}")
         print(e)
         exit()
-    pc += 1
 print("╔" + "".join("═╤"[c == "│"] for c in columns[1:-1]) + "╗")
 print(columns)
 print(sep)
