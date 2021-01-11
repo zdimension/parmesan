@@ -80,7 +80,7 @@ void Tester::generateAnd()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int s=a&b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(AND) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(AND) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -92,7 +92,7 @@ void Tester::generateEor()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int s=a^b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(EOR) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(EOR) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -104,7 +104,7 @@ void Tester::generateLsl()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re), shift=m_distribShift(m_re);
         unsigned int s=b<<shift;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(LSL) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(LSL) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -116,7 +116,7 @@ void Tester::generateLsr()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re), shift=m_distribShift(m_re);
         unsigned int s=b>>shift;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(LSR) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(LSR) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -129,7 +129,7 @@ void Tester::generateAsr()
         int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int shift=m_distribShift(m_re);
         int s=b>>shift;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(ASR) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0 " << bitset<4>(ASR) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -143,7 +143,7 @@ void Tester::generateAdc()
         unsigned short carry=m_distribCarry(m_re);
         int s=a+b+carry;
         unsigned long long sTest=(unsigned long long)((unsigned int)a) + (unsigned int)b + (unsigned int)carry;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(ADC) << " " << bitset<32>(s) << " " << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0)) << (sTest > ULONG_MAX) << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(ADC) << " " << bitset<32>(s) << " " << ((int)s < 0) << (s==0) << (sTest > ULONG_MAX) << /*((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0))*/ "x" << endl;
     }
     m_outFile << endl;
 }
@@ -155,9 +155,9 @@ void Tester::generateSbc()
     {
         int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned short carry=m_distribCarry(m_re);
-        int s=a-b+carry-1;
+        int s=b-a+carry-1;
         unsigned long long sTest=(unsigned long long)((unsigned int)a) - (unsigned int)b + (unsigned int)carry - 1;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(SBC) << " " << bitset<32>(s) << " " << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0)) << (sTest > ULONG_MAX) << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(SBC) << " " << bitset<32>(s) << " " << ((int)s < 0) << (s==0) << /*(sTest > ULONG_MAX) << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0))*/ "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -170,7 +170,7 @@ void Tester::generateRor()
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int shift=m_distribShift(m_re);
         int s=_rotr(b, shift);
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0" << " " << bitset<4>(ROR) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << bitset<5>(shift) << " " << "0" << " " << bitset<4>(ROR) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -182,7 +182,7 @@ void Tester::generateTst()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int s=a&b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(TST) << " " << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(TST) << " " << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -193,8 +193,8 @@ void Tester::generateRsb()
     for(unsigned int i=0; i<m_nbTests; i++)
     {
         int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
-        int s=-b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << "0" << " " << bitset<4>(RSB) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        int s=-a;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << "0" << " " << bitset<4>(RSB) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -206,9 +206,9 @@ void Tester::generateCmp()
     {
         int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned short carry=m_distribCarry(m_re);
-        int s=a-b;
+        int s=b-a;
         unsigned long long sTest=(unsigned long long)((unsigned int)a) - (unsigned int)b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(CMP) << " " << bitset<32>(s) << " " << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0)) << (sTest > ULONG_MAX) << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(CMP) << " " << bitset<32>(b) << " " << ((int)s < 0) << (s==0) << /*(sTest > ULONG_MAX) << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0))*/ "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -222,7 +222,7 @@ void Tester::generateCmn()
         unsigned short carry=m_distribCarry(m_re);
         int s=a+b;
         unsigned long long sTest=(unsigned long long)((unsigned int)a) + (unsigned int)b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(CMN) << " " << bitset<32>(s) << " " << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0)) << (sTest > ULONG_MAX) << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << bitset<1>(carry) << " " << bitset<4>(CMN) << " " << bitset<32>(b) << " " << ((int)s < 0) <<(s==0) << /*(sTest > ULONG_MAX) << ((a >= 0 && b >= 0 && s < 0) || (a < 0 && b < 0 && s >= 0))*/ "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -234,7 +234,7 @@ void Tester::generateOrr()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int s=a|b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(ORR) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(ORR) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -246,7 +246,7 @@ void Tester::generateMul()
     {
         int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         int s=a*b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << "0" << " " << bitset<4>(MUL) << " " << bitset<32>(s) << " " << "x" << "x" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " " << "00000" << " " << "0" << " " << bitset<4>(MUL) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "x" << "x" << endl;
     }
     m_outFile << endl;
 }
@@ -257,8 +257,8 @@ void Tester::generateBic()
     for(unsigned int i=0; i<m_nbTests; i++)
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
-        unsigned int s=a&(~b);
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(BIC) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        unsigned int s=b&(~a);
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(BIC) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
@@ -270,7 +270,7 @@ void Tester::generateMvn()
     {
         unsigned int a=m_distribUnsigned(m_re), b=m_distribUnsigned(m_re);
         unsigned int s=~b;
-        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(MVN) << " " << bitset<32>(s) << " " << "0" << "0" << (s==0) << ((int)s < 0) << endl;
+        m_outFile << bitset<32>(a) << " " << bitset<32>(b) << " 00000 " << "0 " << bitset<4>(MVN) << " " << bitset<32>(s) << " " << ((int)s < 0) <<(s==0) << "0" << "0" << endl;
     }
     m_outFile << endl;
 }
