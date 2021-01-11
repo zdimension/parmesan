@@ -47,11 +47,9 @@ run:
 	muls	r0, r0, r0
 	ldr	r1, [sp, #8]
 	cmp	r0, r1
-	bhi	.LBB0_9
+	bhi	.LBB0_7
 	b	.LBB0_3
 .LBB0_3:
-	b	.LBB0_4
-.LBB0_4:
 	ldr	r0, [sp, #8]
 	ldr	r1, [sp, #4]
 	@APP
@@ -60,28 +58,26 @@ run:
 	@NO_APP
 	ldr	r0, [sp, #64]
 	str	r0, [sp]
-	b	.LBB0_5
-.LBB0_5:
 	ldr	r0, [sp]
 	cmp	r0, #0
-	bne	.LBB0_7
+	bne	.LBB0_5
+	b	.LBB0_4
+.LBB0_4:
+	b	.LBB0_8
+.LBB0_5:
 	b	.LBB0_6
 .LBB0_6:
-	b	.LBB0_10
-.LBB0_7:
-	b	.LBB0_8
-.LBB0_8:
 	ldr	r0, [sp, #4]
 	adds	r0, r0, #1
 	str	r0, [sp, #4]
 	b	.LBB0_2
-.LBB0_9:
+.LBB0_7:
 	ldr	r0, [sp, #8]
 	str	r0, [sp, #16]
-	b	.LBB0_10
-.LBB0_10:
-	b	.LBB0_11
-.LBB0_11:
+	b	.LBB0_8
+.LBB0_8:
+	b	.LBB0_9
+.LBB0_9:
 	ldr	r0, [sp, #8]
 	adds	r0, r0, #2
 	str	r0, [sp, #8]
@@ -92,7 +88,7 @@ run:
 	.fnend
 
 
-	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
+	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6
