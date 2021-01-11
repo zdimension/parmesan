@@ -26,9 +26,7 @@ public:
         ADDIMM,
         SUBIMM,
         MOVIMM,
-        AND_REGISTER,
-        EOR_REGISTER,
-        LSL_REGISTER,
+
         STR,
         LDR
     };
@@ -43,9 +41,6 @@ private:
     void generateAddImm();
     void generateSubImm();
     void generateMovImm();
-    void generateAndRegister();
-    void generateEorRegister();
-    void generateLslRegister();
 
     /// Load_Store
     void generateStr();
