@@ -12,7 +12,7 @@
 class Tester
 {
 public:
-    Tester(std::string outFile, unsigned long nbTests=100);
+    Tester(std::string outFile, unsigned long nbTests=20);
     ~Tester();
     void generateTest(long codeOp);
     enum
