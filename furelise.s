@@ -780,7 +780,7 @@ run:
 	.fnend
 
 
-	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
+	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6

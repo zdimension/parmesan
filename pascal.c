@@ -15,8 +15,7 @@ void run()
 			int result = 1;
 			for (int k = 0; k < jj; k++)
 			{
-				result = (result * (i - k));
-				DIV(result, k + 1, &result);
+				result = DIV(result * (i - k), k + 1);
 			}
 			
 			RES = result;

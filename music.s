@@ -25,36 +25,15 @@
 	.thumb_func
 main:
 	.fnstart
-	.pad	#8
-	sub	sp, #8
+	.pad	#68
+	sub	sp, #68
 	movs	r0, #0
-	str	r0, [sp, #4]
+	str	r0, [sp, #64]
 	@APP
-	sub	sp, #120
+	sub	sp, #508
 	@NO_APP
 	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #120
-	@NO_APP
-	@APP
-	sub	sp, #56
+	sub	sp, #452
 	@NO_APP
 	b	.LBB0_1
 .LBB0_1:
@@ -383,7 +362,7 @@ main:
 	.fnend
 
 
-	.ident	"clang version 8.0.0-3~ubuntu18.04.2 (tags/RELEASE_800/final)"
+	.ident	"clang version 8.0.1-9 (tags/RELEASE_801/final)"
 	.section	".note.GNU-stack","",%progbits
 	.addrsig
 	.eabi_attribute	30, 6
